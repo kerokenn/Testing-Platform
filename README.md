@@ -23,6 +23,33 @@ This project utilizes a **Monorepo architecture** to streamline deployments and 
 
 ---
 
+# Installation Guide
+
+# Back-end Installation
+cd backend
+
+python -m venv venv
+
+.\venv\Scripts\activate
+
+pip install fastapi
+
+pip install "uvicorn[standard]"
+
+pip install firebase-admin
+
+pip install -r requirements.txt
+
+---
+
+# Front-end Installation
+
+cd frontend
+
+npm install
+
+---
+
 ## 📁 Repository Structure
 
 ```text
