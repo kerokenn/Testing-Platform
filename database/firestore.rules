@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users — readable by the owner, writable by admins only
+    match /users/{userId} {
+      allow read: if request.auth.uid == userId;
+      allow write: if request.auth.token.role == 'admin';
+    }
+
+    // Exams — readable by any authenticated user, writable by admins only
+    match /exams/{examId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.token.role == 'admin';
+    }
+
+    // Questions — readable by any authenticated user, writable by admins only
+    match /questions/{questionId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.token.role == 'admin';
+    }
+
+    // Results — readable and writable by the owning examinee only
+    match /results/{resultId} {
+      allow read, write: if request.auth.uid == resource.data.userId;
+    }
+  }
+}
