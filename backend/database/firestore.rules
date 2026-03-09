@@ -22,7 +22,8 @@ service cloud.firestore {
 
     // Results — readable and writable by the owning examinee only
     match /results/{resultId} {
-      allow read, write: if request.auth.uid == resource.data.userId;
+      allow read, update, delete: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
     }
   }
 }

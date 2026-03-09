@@ -73,19 +73,16 @@ mock-testing-platform/
 │       └── User Manager (Access Control) ------> Connects to: User Service
 │
 │
-├── BACKEND (Render / FastAPI + Python)
-│   │   # Responsible for business logic, validation, and database queries
-│   │
-│   ├── Auth Service (Token Verification, Role validation)
-│   ├── User Service (Profile management, Permissions)
-│   ├── Exam Delivery Service (Querying DB, Randomization, Pagination)
-│   ├── Grading Service (Answer checking, Score calculation, Analytics generation)
-│   └── Content Pipeline Service (Handling CSV/OCR uploads, Data tagging)
-│
-│
-└── DATABASE (Firebase Firestore & Auth)
-        # The single source of truth queried via FastAPI and Firebase SDKs
-        ├── Users Collection (Profiles, roles, preferences)
-        ├── Exams/Categories Collection
-        ├── Questions & Choices Collection
-        └── Historical Results Collection
+└── BACKEND (Render / FastAPI + Python)
+    │   # Responsible for business logic, validation, and database queries
+    │
+    ├── Auth Service (Token Verification, Role validation)
+    ├── User Service (Profile management, Permissions)
+    ├── Exam Delivery Service (Querying DB, Randomization, Pagination)
+    ├── Grading Service (Answer checking, Score calculation, Analytics generation)
+    ├── Content Pipeline Service (Handling CSV/OCR uploads, Data tagging)
+    │
+    └── database/
+        │   # Firebase config co-located with the backend that consumes it
+        ├── schema.md (Firestore collection definitions)
+        └── firestore.rules (Security rules for Firestore)
