@@ -4,52 +4,61 @@ Wu and Co.
 
 # Mock Testing Platform
 
-A scalable, modular web application designed for high-concurrency exam delivery, automated grading, and real-time data synchronization.
+A scalable, high-performance mock testing platform designed initially for the Civil Service Exam (CSE), with architectural flexibility to scale for the Licensure Examination for Teachers (LPT). Built with a security-first DevSecOps pipeline.
 
+## 🏗️ Architecture & Tech Stack
 
+This project utilizes a **Monorepo architecture** to streamline deployments and maintain strict type-safety and context across the stack.
 
-## 🏗 System Architecture
+### Core Development Stack
+* **Frontend:** React + TypeScript (Hosted on Vercel)
+* **Backend:** Python + FastAPI (Hosted on Render)
+* **Database & Authentication:** Firebase (Firestore & Firebase Auth)
 
-The project follows a decoupled **Client-Server architecture**, utilizing **Firebase** for real-time data persistence and simplified backend integration.
-
-### 1. Frontend (Next.js)
-*Deployed on Vercel*
-* **Public Module:** Manages the landing experience and initial user onboarding.
-* **Examinee Module:** Optimized for performance during active testing, utilizing local state for timers and Firebase for progress persistence.
-* **Admin Module:** A secure dashboard for CRUD operations on question banks and managing user access levels.
-
-### 2. Backend (Node.js/Python API)
-*Deployed on Render*
-* **Auth Service:** Integration with Firebase Auth for secure JWT-based sessions.
-* **Exam Delivery Service:** Handles randomization logic and pagination to ensure integrity.
-* **Grading & Analytics:** Processes raw exam data into digestible performance metrics.
-* **Content Pipeline:** Bulk-upload engine for processing CSV and OCR data into the Firebase schema.
-
-### 3. Database (Firebase)
-*The Real-time Source of Truth*
-* **Firestore/Realtime DB:** Flexible, NoSQL document-based storage queried by the Render Backend for business logic and validation.
+### DevSecOps & Security Stack
+* **CI/CD:** GitHub Actions (Automated testing & deployment gates)
+* **SCA & SAST:** Snyk / Dependabot / SonarCloud (Automated vulnerability scanning)
+* **Secrets Management:** Doppler / HashiCorp Vault (No `.env` files committed to repo)
+* **WAF:** Cloudflare (DDoS & bot mitigation)
 
 ---
 
-## 📂 Project Structure
+## 📁 Repository Structure
 
 ```text
 mock-testing-platform/
 │
-├── FRONTEND (Next.js) 
-│   ├── Public Module        # Landing Page, Auth (Login/Register)
-│   ├── Examinee Module      # Dashboard, Exam Catalog, Active Exam UI, Results
-│   └── Admin Module         # Question Bank Manager, User Manager
+├── FRONTEND (Vercel / React + TypeScript) 
+│   │   # Responsible for UI, routing, and user experience
+│   │
+│   ├── Public Module
+│   │   ├── Landing Page -----------------------> (Reads static/cached data)
+│   │   └── Auth Pages (Login/Register) --------> Connects to: Firebase Auth
+│   │
+│   ├── Examinee Module
+│   │   ├── Main Dashboard (Stats/History) -----> Connects to: User & Analytics Services
+│   │   ├── Exam Catalog (Filters/Search) ------> Connects to: Exam Delivery Service
+│   │   ├── Active Exam UI (Timer/Questions) ---> Connects to: Exam Delivery Service
+│   │   └── Results & Review (Post-Exam) -------> Connects to: Grading Service
+│   │
+│   └── Admin Module
+│       ├── Question Bank Manager (CRUD) -------> Connects to: Content Pipeline Service
+│       └── User Manager (Access Control) ------> Connects to: User Service
 │
-├── BACKEND (API)
-│   ├── Auth Service         # Firebase Auth Validation & JWT
-│   ├── User Service         # Profile management & Role Verification
-│   ├── Exam Delivery        # Randomization & Pagination Logic
-│   ├── Grading Service      # Score calculation & Analytics
-│   └── Content Pipeline     # CSV/OCR uploads & Data tagging
 │
-└── DATABASE (Firebase)
-    ├── Users Collection      # Profiles, Roles, and Metadata
-    ├── Exams Collection      # Categories and Test Metadata
-    ├── Questions Collection  # Bank of questions & choice mappings
-    └── Results Collection    # Historical performance data
+├── BACKEND (Render / FastAPI + Python)
+│   │   # Responsible for business logic, validation, and database queries
+│   │
+│   ├── Auth Service (Token Verification, Role validation)
+│   ├── User Service (Profile management, Permissions)
+│   ├── Exam Delivery Service (Querying DB, Randomization, Pagination)
+│   ├── Grading Service (Answer checking, Score calculation, Analytics generation)
+│   └── Content Pipeline Service (Handling CSV/OCR uploads, Data tagging)
+│
+│
+└── DATABASE (Firebase Firestore & Auth)
+        # The single source of truth queried via FastAPI and Firebase SDKs
+        ├── Users Collection (Profiles, roles, preferences)
+        ├── Exams/Categories Collection
+        ├── Questions & Choices Collection
+        └── Historical Results Collection
