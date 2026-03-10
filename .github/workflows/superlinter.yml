@@ -15,18 +15,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          # Full git history is needed to get a proper list of changed files
           fetch-depth: 0
 
       - name: Lint Code Base
         uses: github/super-linter@v5
         env:
-          VALIDATE_ALL_CODEBASE: false # Set to true to scan the whole repo, false to only scan changed files
+          VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: "main"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided by GitHub
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-          # Optional: Turn off linters you don't need to speed up the run
-          VALIDATE_JSCPD: false 
+          # OPT-IN MODE: Only these specific linters will run. 
+          # No "false" values are allowed in this block.
           VALIDATE_MARKDOWN: true
           VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_PYTHON_BLACK: true
           VALIDATE_TYPESCRIPT_ES: true
