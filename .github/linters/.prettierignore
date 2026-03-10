@@ -1,0 +1,30 @@
+# Ignore directories and artifacts for Super-Linter
+
+# Package directories
+node_modules/
+frontend/node_modules/
+
+# Python environments
+venv/
+env/
+backend/venv/
+__pycache__/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+coverage/
+
+# Lock files (Auto-generated, no need to lint)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Minified files
+*.min.js
+*.min.css
+
+# Firebase/GCP configs
+*.json
